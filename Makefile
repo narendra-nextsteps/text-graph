@@ -9,6 +9,9 @@ gen-proto:
 interactive:
 	venv/bin/pip install bpython ipython pylint pep8 flake8 pydocstyle rope
 
+init-db:
+	venv/bin/python3 -m  graph_curation.db.main
+
 venv:
 	virtualenv --python=python3 venv && venv/bin/python setup.py develop
 
