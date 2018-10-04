@@ -56,32 +56,31 @@ def assign_task_query(assigned_by, assigned_to_list, chapter_key):
 
     LET need_to_create_subtasks = tasks[0].status == 'PENDING'
 
-    LET mcqs = (
+    LET textContent = (
         FILTER need_to_create_subtasks
-        FOR mcq in {mcqs_collection}
-            FILTER chapter_doc.chapter_id == mcq.chapterId
-            RETURN mcq
+        FOR text in {text_content_collection}
+            FILTER chapter_doc.chapter_id == text.chapterId
+            RETURN text
     )
 
     LET sub_tasks = (
         FILTER need_to_create_subtasks
-        FOR mcq in mcqs
+        FOR text in textContent
             INSERT {{
                 task_key: tasks[0]._key,
-                mcq_key: mcq._key,
-                mcq_Id: mcq.mcqId,
+                text_id: text.context_id,
                 status: 'PENDING',
                 assigned_time: DATE_ISO8601(DATE_NOW())
             }} IN {sub_task_collection}
             RETURN NEW
     )
 
-    LET update_mcq = (
+    LET update_text = (
         FILTER need_to_create_subtasks
-        FOR mcq in Mcqs
-            UPDATE mcq with {{
+        FOR text in textContent
+            UPDATE text with {{
                 status: "PENDING"
-            }} IN {mcqs_collection}
+            }} IN {text_content_collection}
     )
 
     RETURN {{
@@ -92,7 +91,7 @@ def assign_task_query(assigned_by, assigned_to_list, chapter_key):
         chapter_key=chapter_key,
         sub_task_collection=_db_nomenclature.SUBTASK_COLLECTION,
         chapter_collection=_db_nomenclature.CHAPTER_COLLECTION,
-        mcqs_collection=_db_nomenclature.MCQS_COLLECTION,
+        text_content_collection=_db_nomenclature.TEXT_CONTENT_COLLECTION,
         task_collection=_db_nomenclature.TASK_COLLECTION
     )
 
