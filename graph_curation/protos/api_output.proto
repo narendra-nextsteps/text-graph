@@ -1,0 +1,276 @@
+syntax = "proto2";
+
+package graph_curation.api_output;
+//get
+
+import "google/protobuf/timestamp.proto";
+
+import "graph_curation/protos/database.proto";
+
+message Acknowledgement {
+    optional bool is_successful_execution = 1;
+    repeated string execution_error_messages = 2;
+}
+
+message Login {
+    optional string user_key = 1;
+    optional string acces_token = 2;
+    optional string refresh_token = 3;
+    optional bool is_successful_execution = 30;
+    repeated string execution_error_messages = 31;
+}
+
+message GetSuperAdminDashboard {
+    message TaskReport {
+        optional graph_curation.TasksDocument.TaskStatus.Enum status = 1;
+        optional string chapter_key = 2;
+        optional string chapter = 3;
+        optional string assigned_to = 4;
+        optional google.protobuf.Timestamp completed_time = 5;
+    }
+    repeated TaskReport tasks = 1;
+    optional bool is_successful_execution = 30;
+    repeated string execution_error_messages = 31;
+}
+
+message GetAllUsers {
+    message User {
+        optional string username = 1;
+        optional string first_name = 2;
+        optional string last_name = 3;
+        optional string email = 4;
+        optional graph_curation.UsersDocument.UserRole.Enum role = 5;
+    }
+    repeated User users = 1;
+    optional bool is_successful_execution = 30;
+    repeated string execution_error_messages = 31;
+}
+
+message CreateUser {
+    optional bool is_successful_execution = 30;
+    repeated string execution_error_messages = 31;
+}
+
+message GetAssignmentData {
+    message Chapter {
+        optional string chapter_key = 1;
+        optional string standard = 2;
+        optional string chapter = 3;
+        optional string book = 4;
+        optional string subject = 5;
+        optional string chapter_id = 6;
+    }
+
+    message User {
+        optional string user_key = 1;
+        optional string role = 2;
+    }
+
+    repeated Chapter chapters = 1;
+    repeated User users = 2;
+}
+
+message GetTasksByChapter {
+    message Task {
+        optional string task_key = 1;
+        optional string status = 2;
+        optional string assigned_to = 3;
+        optional string chapter_key = 4;
+        optional string chapter = 5;
+        optional string assigned_time = 6;
+    }
+
+    repeated Task tasks = 1;
+}
+
+message GetSubTasks {
+    message SubTask {
+        optional string sub_task_key = 1;
+        optional graph_curation.SubTasksDocument.SubTaskStatus.Enum sub_task_status = 2;
+        optional string concept_key = 3;
+        optional string concept = 4;
+    }
+    repeated SubTask sub_tasks = 1;
+    optional bool is_successful_execution = 30;
+    repeated string execution_error_messages = 31;
+}
+
+message GetUserDashboard {
+    message TaskReport {
+        optional string task_key = 1;
+        repeated GetSubTasks.SubTask sub_tasks = 2;
+        optional string chapter_key = 3;
+        optional string chapter = 4;
+        optional string task_status = 5;
+    }
+    repeated TaskReport tasks = 1;
+    optional bool is_successful_execution = 30;
+    repeated string execution_error_messages = 31;
+}
+
+message TaskData {
+    message Chapter {
+        optional string _key = 1;
+        optional string _id = 2;
+        optional string _rev = 3;
+        optional string chapter = 4;
+        optional string book = 5;
+        optional string standard = 6;
+        optional string subject = 7;
+        optional string locked_to = 8;
+        optional string chapter_id = 9;
+    }
+    repeated Chapter chapters = 1;
+    optional bool is_successful_execution = 30;
+    repeated string execution_error_messages = 31;
+}
+
+message SubTaskData {
+    message Concept {
+        optional string id = 1;
+        optional string name = 2;
+    }
+    message Aspect {
+        optional string aspect = 1;
+        optional string concept = 2;
+    }
+    message Question {
+        optional string rawText = 1;
+        optional string cleanText = 2;
+        repeated Concept dominantConcepts = 3;
+        repeated Concept nonDominantConcepts = 4;
+        repeated Aspect aspects = 5;
+    }
+    message Option {
+        optional string rawText = 1;
+        optional string cleanText = 2;
+        optional int32 level = 3;
+        optional bool isCorrect = 4;
+        repeated Concept dominantConcepts = 5;
+        repeated Concept nonDominantConcepts = 6;
+    }
+    message MCQ {
+        optional string mcqId = 1;
+        optional string contextId = 2;
+        optional Question question = 3;
+        repeated Option options = 4;
+        optional string type = 5;
+        optional int32 questionLevel = 6;
+        optional string standard = 7;
+        optional string subject = 8;
+        optional string chapter = 9;
+        optional int32 chapterId = 10;
+        optional string _key = 11;
+        optional string _id = 12;
+        optional string _rev = 13;
+        optional string status = 14;
+    }
+    repeated MCQ mcqs = 1;
+    optional bool is_successful_execution = 30;
+    repeated string execution_error_messages = 31;
+}
+
+message GetDependentConcepts {
+    message DependentConcepts {
+        optional string _key = 1;
+        optional string _from = 2;
+        optional string _to = 3;
+        optional string mcq_id = 4;
+        optional string to_concept_name = 5;
+        optional string to_concept_id = 6;
+        optional string deleted_by = 7;
+        optional string deleted_time = 8;
+        optional string flagged_by = 9;
+        optional string flagged_time = 10;
+        optional string created_by = 11;
+        optional string created_time = 12;
+        optional string unflagged_by = 13;
+        optional string unflagged_from = 14;
+        optional string _rev = 15;
+        optional string _id = 16;
+    }
+    repeated DependentConcepts dependent_concepts = 1;
+    optional bool is_successful_execution = 30;
+    repeated string execution_error_messages = 31;
+}
+
+message AddEdge {
+    optional bool is_successful_execution = 30;
+    repeated string execution_error_messages = 31;
+}
+
+message DeleteEge {
+    optional bool is_successful_execution = 30;
+    repeated string execution_error_messages = 31;
+}
+
+
+// old --------
+
+
+message GetAllAssignedTasks {
+    message ChapterAssignment {
+        optional string chapter_key = 1;
+        optional string chapter = 2;
+        optional string assigned_to = 3;
+        optional google.protobuf.Timestamp assigned_time = 4;
+        optional google.protobuf.Timestamp completed_time = 5;
+        optional graph_curation.TasksDocument.TaskStatus.Enum status = 6;
+    }
+    repeated ChapterAssignment assignments = 1;
+    optional bool is_successful_execution = 30;
+    repeated string execution_error_messages = 31;
+}
+
+message GetSelectionData {
+    message Standard {
+        optional int32 standard = 1;
+        repeated Subject subjects = 2;
+    }
+    message Subject {
+        optional string name = 1;
+        repeated Chapter chapters = 2;
+    }
+    message Chapter {
+        optional string name = 1;
+        repeated Concepts concepts = 2;
+    }
+    message Concepts {
+        optional string concept_name = 1;
+        optional string concept_key = 2;
+    }
+    repeated Standard selection_data = 1;
+    optional GetSelectedConcept concept = 2;
+    optional bool is_successful_execution = 30;
+    repeated string execution_error_messages = 31;
+}
+
+message GetSelectedConcept {
+    message DependentConcepts {
+        optional string created_by = 1;
+        optional string deleted_by = 2;
+        optional string flagged_by = 3;
+        optional string unflagged_by = 4;
+        optional string concept_key = 5;
+        optional string concept_name = 6;
+        optional google.protobuf.Timestamp time_created = 7;
+        optional google.protobuf.Timestamp time_deleted = 8;
+        optional bool is_active = 9;
+        optional string color = 10;
+
+    }
+    repeated string chapter_keys = 4;
+    optional string concept_name = 5;
+    optional string locked_to = 6 [default = ''];
+    repeated string pervious_users = 7;
+    map<string, DependentConcepts> dependent_concepts = 8;//created time to the dependent concept
+    optional bool is_successful_execution = 30;
+    repeated string execution_error_messages = 31;
+}
+
+message AddDependentConcept {
+    optional string nested_concept_key = 1;
+    optional GetSelectedConcept.DependentConcepts dependent_concept = 2;
+    optional bool is_successful_execution = 30;
+    repeated string execution_error_messages = 31;
+}
