@@ -1,8 +1,10 @@
 """All the names of collections and db."""
 
-DATABASE = "graph_curation"
+DATABASE = "text_graph_curation"
 
 CHAPTER_COLLECTION = "Chapters"
+
+CHAPTER_CONCEPTS_COLLECTION = "ChapterConcepts"
 
 TASK_COLLECTION = "Tasks"
 
@@ -12,6 +14,6 @@ USER_COLLECTION = "Users"
 
 REVOKED_TOKEN_COLLECTION = "RevokedToken"
 
-MCQS_COLLECTION = "Mcqs"
+TEXT_CONTENT_COLLECTION = "TextContent"
 
-MCQ_EDGE_COLLECTION = "McqEdges"
+TEXT_EDGE_COLLECTION = "TextEdges"
