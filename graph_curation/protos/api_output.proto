@@ -79,7 +79,6 @@ message GetTasksByChapter {
         optional string chapter = 5;
         optional string assigned_time = 6;
     }
-
     repeated Task tasks = 1;
 }
 
